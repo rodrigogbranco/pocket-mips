@@ -1,0 +1,6 @@
+#!/bin/bash
+
+PROGRAM_GHDL=$1
+
+export PROGRAM_GHDL
+make
