@@ -11,7 +11,7 @@ architecture mixed of tbdata_memory is
 		signal ReadData : bit_vector(7 downto 0);
 begin
 	m1: entity work.data_memory(behavioral)
-	port map(Address,WriteData,MemRead,MemWrite,Clk,Halt,ReadData);
+	port map(Address,WriteData,MemRead,MemWrite,Clk,ReadData);
 
 	m2: entity work.clock_generator(behavioral)
 	port map(Halt,Clk);
