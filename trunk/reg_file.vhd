@@ -7,13 +7,21 @@ entity reg_file is
 		RegWrite      : in bit;
 		Clk	      : in bit;
 		ReadData1     : out bit_vector(7 downto 0);
-		ReadData2     : out bit_vector(7 downto 0));
+		ReadData2     : out bit_vector(7 downto 0);
+
+		WriteHidden : in bit;
+		WhichHidden : in bit;
+		ReadHidden : out bit_vector(7 downto 0);
+		Ac_out : out bit_vector(7 downto 0));
 end reg_file;
 
 architecture behavioral of reg_file is
 	type regfile is array (3 downto 0) of bit_vector(7 downto 0);
 	signal regs : regfile;
 	subtype small is integer range 0 to 3;
+
+	signal Ac   : bit_vector(7 downto 0);
+	signal Bc   : bit_vector(7 downto 0);
 begin
 	process(ReadRegister1,ReadRegister2)
 		variable temp : small;
@@ -34,6 +42,15 @@ begin
 		ReadData2 <= regs(temp2);
 	end process;
 
+	process(WhichHidden)
+	begin
+		if(WhichHidden = '0') then
+			ReadHidden <= Ac;
+		else
+			ReadHidden <= Bc;
+		end if;
+	end process;
+
 	process(Clk)
 		variable temp : small;
 	begin
@@ -48,6 +65,19 @@ begin
 				
 				regs(temp) <= WriteData;
 			end if;
+
+			if(WriteHidden = '1') then
+				if(WhichHidden = '0') then
+					Ac <= WriteData;
+				else
+					Bc <= WriteData;
+				end if;
+			end if;
 		end if;
+	end process;
+
+	process(Ac)
+	begin
+		Ac_out <= Ac;
 	end process;
 end;
