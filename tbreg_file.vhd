@@ -13,13 +13,15 @@ architecture mixed of tbreg_file is
 
 		signal WriteHidden : bit;
 		signal WhichHidden : bit;
-		signal ReadHidden : bit_vector(7 downto 0); 
+		signal ReadHidden : bit_vector(7 downto 0);
+		signal Ac_out : bit_vector(7 downto 0); 
+		signal LW_SW : bit;
 
 		signal Halt : bit;	
 begin
 	m1: entity work.reg_file(behavioral)
 	port map(ReadRegister1,ReadRegister2,WriteRegister,WriteData,RegWrite,
-		 Clk,ReadData1,ReadData2,WriteHidden,WhichHidden,ReadHidden);
+		 Clk,ReadData1,ReadData2,WriteHidden,WhichHidden,ReadHidden,Ac_out,LW_SW);
 
 	m2: entity work.clock_generator(behavioral)
 	port map(Halt,Clk);

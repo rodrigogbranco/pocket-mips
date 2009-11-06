@@ -6,9 +6,10 @@ architecture mixed of tbpc_register is
 	signal Clk : bit;
 	signal NewPC  : bit_vector(7 downto 0);
 	signal CurrentPC :bit_vector(7 downto 0);
+	signal init_clock : bit;
 begin
 	m1: entity work.clock_generator(behavioral)
-	port map(Halt,Clk);
+	port map(Halt,Clk,init_clock);
 	
 	m2 : entity work.pc_register(behavioral)
 	port map (Clk,NewPC,CurrentPC);

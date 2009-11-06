@@ -1,7 +1,8 @@
 entity clock_generator is
 	port(
 		Halt : in bit; -- Sinal de parada
-		Clk  : out bit); -- Sinal de clock
+		Clk  : out bit; -- Sinal de clock
+		init_clock : in bit);
 end clock_generator;
 
 architecture behavioral of clock_generator is
@@ -10,13 +11,13 @@ architecture behavioral of clock_generator is
 begin
 	process
 	begin
-		--verifica se ainda é pra gerar clock
-		if (canHalt = '0') then
-			clock <= transport '1' after 1 ns; clock <= transport '0' after 2 ns;
-			wait for 2 ns;
-		else
-			wait;
-		end if;
+			--verifica se ainda é pra gerar clock
+			if (canHalt = '0') then
+				clock <= transport '1' after 1 ns; clock <= transport '0' after 2 ns;
+				wait for 2 ns;
+			else
+				wait;
+			end if;
 	end process;
 
 	process(clock,Halt)
@@ -25,7 +26,9 @@ begin
 		if(canHalt = '0') then
 			--transporta o sinal de clock
 			if(clock'event) then
-				Clk <= transport clock;
+				if(init_clock = '1') then
+					Clk <= transport clock;
+				end if;
 			end if;
 
 			--escalona o canHalt para o proximo ciclo, se necessário
