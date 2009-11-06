@@ -8,7 +8,7 @@ end mux2x1;
 
 architecture behavioral of mux2x1 is
 begin
-	process(selector)
+	process(A,B,selector)
 	begin
 		if (selector = '0') then
 			Result <= A;

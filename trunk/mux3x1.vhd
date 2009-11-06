@@ -9,7 +9,7 @@ end mux3x1;
 
 architecture behavioral of mux3x1 is
 begin
-	process(selector)
+	process(A,B,C,selector)
 	begin
 		if (selector = "00") then
 			Result <= A;

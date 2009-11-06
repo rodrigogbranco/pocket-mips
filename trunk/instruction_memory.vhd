@@ -4,7 +4,7 @@ entity instruction_memory is
 		Instruction : out bit_vector(7 downto 0);
 
 		LoadMemory : in bit; 
-		MemoryLoaded : out bit);
+		MemoryLoaded : out bit := '0');
 end instruction_memory;
 
 architecture behavioral of instruction_memory is
@@ -32,7 +32,9 @@ begin
 	begin
 		if(LoadMemory = '1') then
 			--read file
-			
+			mem(0) <= "00100110";
+			mem(1) <= "00001000";
+			mem(2) <= "11111111";
 			MemoryLoaded <= '1';
 		end if;
 	end process;

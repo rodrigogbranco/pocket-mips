@@ -37,6 +37,8 @@ architecture behavioral of system is
 	signal WhichHidden : bit;
 	signal ReadHidden : bit_vector(7 downto 0);
 	signal isHidden : bit; 
+	signal LW_SW : bit;
+	signal init_clock : bit;
 
 	signal Clk : bit;
 
@@ -46,14 +48,14 @@ architecture behavioral of system is
 	signal memoryloaded : bit; --controle de carga de memoria entre a UC e instr memory (fim)
 begin
 	m : entity work.clock_generator(behavioral)
-	port map(Halt,Clk);
+	port map(Halt,Clk,init_clock);
 	
 	m0 : entity work.instruction_memory(behavioral)
 	port map(pc_out,mem_instr_out,loadmemory,memoryloaded);
 
 	m1 : entity work.reg_file(behavioral)
 	port map(mem_instr_out(4 downto 3),mem_instr_out(2 downto 1),mem_instr_out(4 downto 3),mux_mem_reg_write,
-		RegWrite,Clk,reg_out1,reg_out2,WriteHidden,WhichHidden,ReadHidden,Ac_out);
+		RegWrite,Clk,reg_out1,reg_out2,WriteHidden,WhichHidden,ReadHidden,Ac_out,LW_SW);
 
 	m2 : entity work.sign_extend(behavioral)
 	port map(mem_instr_out(4 downto 0),sign_ext_out);
@@ -83,5 +85,9 @@ begin
 	port map(Clk,mux_branch_out,pc_out);
 
 	m11: entity work.adder(behavioral)
-	port map(one_value,pc_out,adder_out);	
+	port map(one_value,pc_out,adder_out);
+
+	m12 : entity work.control_unit(behavioral)
+	port map(mem_instr_out(7 downto 5),mem_instr_out(1 downto 0),RegDst,RegWrite,MemRead,MemWrite,MemToReg,Branch,
+		InvZero,Halt,ALUSrc,ALUOp,WriteHidden,WhichHidden,isHidden,LW_SW,init_clock,loadmemory,memoryloaded);	
 end;
