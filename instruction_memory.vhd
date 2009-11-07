@@ -32,9 +32,10 @@ begin
 	begin
 		if(LoadMemory = '1') then
 			--read file
-			mem(0) <= "00100110";
+			mem(0) <= "00111111";
 			mem(1) <= "00001000";
 			mem(2) <= "11111111";
+			--memory is fully loaded
 			MemoryLoaded <= '1';
 		end if;
 	end process;

@@ -15,8 +15,7 @@ entity control_unit is
 
 		WriteHidden : out bit;
 		WhichHidden : out bit;
-		isHidden : out bit;
-		LW_SW : out bit;
+		isHidden : out bit_vector(1 downto 0);
 		init_clock : out bit := '0';
 
 		LoadMemory : out bit := '0'; --aux, to load memory
@@ -39,7 +38,6 @@ begin
 				case Op is
 					--Type R instructions
 					when "000" => --ADD
-						report "ADD " & "";
 						RegDst <= '0'; --??? We aren't using this signal
 						RegWrite <= '0'; --Don't write on normal registers
 						MemRead <= '0'; --Don't read from memory
@@ -51,8 +49,7 @@ begin
 						ALUOp <= "00"; --Add
 						WriteHidden <= '1'; --It will write in AC or BC
 						WhichHidden <= '0'; --Choose AC
-						isHidden <= '0'; --Choose Ac or BC for read
-						LW_SW <= '0'; -- Load/Store Operation
+						isHidden <= "00"; --Choose Ac or BC for read
 					
 					when "010" => --SUB
 						RegDst <= '0'; --??? We aren't using this signal
@@ -66,8 +63,7 @@ begin
 						ALUOp <= "01"; --Add
 						WriteHidden <= '1'; --It will write in AC or BC
 						WhichHidden <= '0'; --Choose AC
-						isHidden <= '0'; --Choose Ac or BC for read
-						LW_SW <= '0'; -- Load/Store Operation
+						isHidden <= "00"; --Choose Ac or BC for read
 
 					when "110" =>  --CHOOSE
 						case Func is
@@ -83,8 +79,7 @@ begin
 								ALUOp <= "00"; --Add
 								WriteHidden <= '1'; --It will write in AC or BC
 								WhichHidden <= '0'; --Choose AC
-								isHidden <= '0'; --Choose Ac or BC for read
-								LW_SW <= '0'; -- Load/Store Operation
+								isHidden <= "00"; --Choose Ac or BC for read
 					
 							when "01" => --MTB
 								RegDst <= '0'; --??? We aren't using this signal
@@ -98,8 +93,7 @@ begin
 								ALUOp <= "00"; --Add
 								WriteHidden <= '1'; --It will write in AC or BC
 								WhichHidden <= '1'; --Choose BC
-								isHidden <= '0'; --Choose Ac or BC for read
-								LW_SW <= '0'; -- Load/Store Operation
+								isHidden <= "00"; --Choose Ac or BC for read
 							when others => --nop
 								RegDst <= '0'; --??? We aren't using this signal
 								RegWrite <= '0'; --Don't write on normal registers
@@ -112,8 +106,7 @@ begin
 								ALUOp <= "00"; --Add
 								WriteHidden <= '0'; --It will NOT write in AC or BC
 								WhichHidden <= '0'; --Choose BC
-								isHidden <= '0'; --Choose Ac or BC for read
-								LW_SW <= '0'; -- Load/Store Operation
+								isHidden <= "00"; --Choose Ac or BC for read
 						end case;
 					when "111" => --CHOOSE
 						ALUOp <= "00"; --add
@@ -130,8 +123,7 @@ begin
 								ALUOp <= "00"; --Add
 								WriteHidden <= '0'; --It will NOT write in AC or BC
 								WhichHidden <= '0'; --Choose AC
-								isHidden <= '0'; --Choose Ac or BC for read
-								LW_SW <= '0'; -- Load/Store Operation
+								isHidden <= "00"; --Choose Ac or BC for read
 							when "01" => --MFB
 								RegDst <= '0'; --??? We aren't using this signal
 								RegWrite <= '1'; --Write on normal registers
@@ -144,10 +136,21 @@ begin
 								ALUOp <= "00"; --Add
 								WriteHidden <= '0'; --It will NOT write in AC or BC
 								WhichHidden <= '1'; --Choose BC
-								isHidden <= '0'; --Choose Ac or BC for read
-								LW_SW <= '0'; -- Load/Store Operation
-							when "11" => --HALT
-								report "HALT";
+								isHidden <= "00"; --Choose Ac or BC for read
+								
+							when "11" => --HALT;
+								RegDst <= '0'; --??? We aren't using this signal
+								RegWrite <= '0'; --Don't write on normal registers
+								MemRead <= '0'; --Don't read from memory
+								MemWrite <= '0'; --Don't write on memory
+								MemToReg <= '0'; -- Don't load from memory
+								Branch <= '0'; --Don't do the branch
+								InvZero <= '0'; --??? We aren't using this signal
+								ALUSrc <= "00"; --Zero Value
+								ALUOp <= "00"; --Add
+								WriteHidden <= '0'; --It will NOT write in AC or BC
+								WhichHidden <= '0'; --Choose BC
+								isHidden <= "00"; --Choose Ac or
 								Halt <= '1';
 							when others => --nop
 								RegDst <= '0'; --??? We aren't using this signal
@@ -161,12 +164,10 @@ begin
 								ALUOp <= "00"; --Add
 								WriteHidden <= '0'; --It will NOT write in AC or BC
 								WhichHidden <= '0'; --Choose BC
-								isHidden <= '0'; --Choose Ac or BC for read
-								LW_SW <= '0'; -- Load/Store Operation
+								isHidden <= "00"; --Choose Ac or BC for read
 						end case;
 					--Type I instructions
 					when "001" => --ADDI
-						report "ADDI" & "";
 						RegDst <= '0'; --??? We aren't using this signal
 						RegWrite <= '0'; --Don't write on normal registers
 						MemRead <= '0'; --Don't read from memory
@@ -178,8 +179,7 @@ begin
 						ALUOp <= "00"; --Add
 						WriteHidden <= '1'; --It will write in AC or BC
 						WhichHidden <= '0'; --Choose AC
-						isHidden <= '0'; --Choose Ac or BC for read
-						LW_SW <= '0'; -- Load/Store Operation
+						isHidden <= "00"; --Choose Ac or BC for read
 					when "100" => --LW
 						RegDst <= '0'; --??? We aren't using this signal
 						RegWrite <= '0'; --Don't write on normal registers
@@ -192,8 +192,7 @@ begin
 						ALUOp <= "00"; --Add
 						WriteHidden <= '1'; --It will write in AC or BC
 						WhichHidden <= '0'; --Choose AC
-						isHidden <= '0'; --Choose Ac or BC for read
-						LW_SW <= '1'; -- Load/Store Operation
+						isHidden <= "10"; --Choose Zero value
 					when "101" => --SW
 						RegDst <= '0'; --??? We aren't using this signal
 						RegWrite <= '0'; --Don't write on normal registers
@@ -206,8 +205,7 @@ begin
 						ALUOp <= "00"; --Add
 						WriteHidden <= '0'; --It will NOT write in AC or BC
 						WhichHidden <= '0'; --Choose AC
-						isHidden <= '0'; --Choose Ac or BC for read
-						LW_SW <= '1'; -- Load/Store Operation
+						isHidden <= "10"; --Choose Zero Value
 
 					--Type J instructions
 					when "011" => --BEQ
@@ -222,8 +220,7 @@ begin
 						ALUOp <= "01"; --Sub
 						WriteHidden <= '0'; --It will NOT write in AC or BC
 						WhichHidden <= '0'; --Choose AC
-						isHidden <= '1'; --Choose Ac or BC for read
-						LW_SW <= '0'; -- Load/Store Operation
+						isHidden <= "01"; --Choose Ac or BC for read
 
 					--Others
 					when others => --NOP
@@ -238,8 +235,7 @@ begin
 						ALUOp <= "00"; --Add
 						WriteHidden <= '0'; --It will NOT write in AC or BC
 						WhichHidden <= '0'; --Choose BC
-						isHidden <= '0'; --Choose Ac or BC for read
-						LW_SW <= '0'; -- Load/Store Operation
+						isHidden <= "00"; --Choose Ac or BC for read
 				end case;
 			end if;
 		end if;
