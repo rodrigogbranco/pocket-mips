@@ -12,8 +12,7 @@ entity reg_file is
 		WriteHidden : in bit;
 		WhichHidden : in bit;
 		ReadHidden : out bit_vector(7 downto 0);
-		Ac_out : out bit_vector(7 downto 0);
-		LW_SW	    : in bit);
+		Ac_out : out bit_vector(7 downto 0));
 end reg_file;
 
 architecture behavioral of reg_file is
@@ -43,7 +42,7 @@ begin
 		ReadData1 <= regs(temp2);
 	end process;
 
-	process(WhichHidden)
+	process(WhichHidden,Ac,Bc)
 	begin
 		if(WhichHidden = '0') then
 			ReadHidden <= Ac;
@@ -79,10 +78,6 @@ begin
 
 	process(Ac)
 	begin
-		if (LW_SW = '0') then
-			Ac_out <= Ac;
-		else
-			Ac_out <= "00000000";
-		end if;
+		Ac_out <= Ac;
 	end process;
 end;

@@ -18,13 +18,14 @@ architecture mixed of tbreg_file is
 		signal LW_SW : bit;
 
 		signal Halt : bit;	
+		signal init_clock : bit;
 begin
 	m1: entity work.reg_file(behavioral)
 	port map(ReadRegister1,ReadRegister2,WriteRegister,WriteData,RegWrite,
-		 Clk,ReadData1,ReadData2,WriteHidden,WhichHidden,ReadHidden,Ac_out,LW_SW);
+		 Clk,ReadData1,ReadData2,WriteHidden,WhichHidden,ReadHidden,Ac_out);
 
 	m2: entity work.clock_generator(behavioral)
-	port map(Halt,Clk);
+	port map(Halt,Clk,init_clock);
 	
 	checking : process is
 	begin
