@@ -16,19 +16,19 @@ begin
 		subtype small is integer range 0 to 255;
 		variable temp : small := 0;
 	begin
-		if(Clk'event and Clk = '1') then
-			temp := 0;
-			for index in 0 to 7 loop
-			      if (Address(index) = '1') then
+		temp := 0;
+		for index in 0 to 7 loop
+			if (Address(index) = '1') then
 				temp := temp + 2**index;
-			      end if;
-			end loop;
+		      end if;
+		end loop;
 
-			if(MemRead = '1' and MemWrite = '0') then
-				ReadData <= mem(temp);
-			elsif (MemWrite = '1' and MemRead = '0') then
+		if(MemRead = '1' and MemWrite = '0') then
+			ReadData <= mem(temp);
+		elsif (MemWrite = '1' and MemRead = '0') then
+			if(Clk'event and Clk = '1') then
 				mem(temp) <= WriteData;
-			end if;	
-		end if;
+			end if;
+		end if;	
 	end process;
 end;

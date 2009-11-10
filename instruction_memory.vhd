@@ -29,9 +29,14 @@ begin
 	end process;
 
 	process(LoadMemory)
+		subtype word is bit_vector(7 downto 0);
+		type t_file is file of bit_vector(7 downto 0);
+		variable i				:	natural;
+		file instructions	:	t_file;
 	begin
 		if(LoadMemory = '1') then
 			--read file
+			FILE_OPEN(instructions,"input.dat",read_mode);
 			mem(0) <= "00111111";
 			mem(1) <= "00001000";
 			mem(2) <= "11111111";

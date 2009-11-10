@@ -9,12 +9,13 @@ architecture mixed of tbdata_memory is
 		signal Clk : bit;
 		signal Halt : bit;
 		signal ReadData : bit_vector(7 downto 0);
+		signal init_clock : bit := '1';
 begin
 	m1: entity work.data_memory(behavioral)
 	port map(Address,WriteData,MemRead,MemWrite,Clk,ReadData);
 
 	m2: entity work.clock_generator(behavioral)
-	port map(Halt,Clk);
+	port map(Halt,Clk,init_clock);
 	
 	checking : process is
 	begin
