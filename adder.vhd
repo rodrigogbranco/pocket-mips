@@ -1,15 +1,16 @@
 entity adder is
 	port(
-		A : in bit_vector(7 downto 0);
-		B : in bit_vector(7 downto 0);
-		Sum : out bit_vector(7 downto 0));
+		A 			: in bit_vector(7 downto 0);
+		B 			: in bit_vector(7 downto 0);
+		CarryIn	:	in bit;
+		Sum 		: out bit_vector(7 downto 0));
 end adder;
 
 architecture behavioral of adder is
 	 	signal carry : bit_vector(7 downto 0);
 begin
 	m0: entity work.adder1b(behavioral)
-	port map(A(0),B(0),'0',carry(0),Sum(0));
+	port map(A(0),B(0),CarryIn,carry(0),Sum(0));
 
 	m1: entity work.adder1b(behavioral)
 	port map(A(1),B(1),carry(0),carry(1),Sum(1));
