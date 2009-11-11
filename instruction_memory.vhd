@@ -29,14 +29,19 @@ begin
 	end process;
 
 	process(LoadMemory)
-		subtype word is bit_vector(7 downto 0);
-		type t_file is file of bit_vector(7 downto 0);
+		--type word is array (7 downto 0) of bit;
+		type t_file is file of bit;
 		variable i				:	natural;
 		file instructions	:	t_file;
 	begin
 		if(LoadMemory = '1') then
 			--read file
+			i:=0;
 			FILE_OPEN(instructions,"input.dat",read_mode);
+			while not endfile(instructions) loop
+				read(instructions,mem(i));
+				i := i+1;
+			end loop;
 			mem(0) <= "00111111";
 			mem(1) <= "00001000";
 			mem(2) <= "11111111";
