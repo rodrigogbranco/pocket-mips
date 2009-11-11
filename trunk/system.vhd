@@ -20,6 +20,7 @@ architecture behavioral of system is
 	signal one_value : bit_vector(7 downto 0) := "00000001"; --valor constant Um, para PC
 	signal mux_branch_out : bit_vector(7 downto 0); -- saida mux com Adder PC ou AC
 	signal pc_out : bit_vector(7 downto 0); --sport map(alu_out,data_mem_out,MemToReg,mux_mem_reg_write);aida PC
+	signal carryIn : bit := '0';
 
 	--Control Unit signals
 	signal RegDst : bit;
@@ -84,7 +85,7 @@ begin
 	port map(Clk,mux_branch_out,pc_out);
 
 	m11: entity work.adder(behavioral)
-	port map(one_value,pc_out,adder_out);
+	port map(one_value,pc_out,carryIn,adder_out);
 
 	m12 : entity work.control_unit(behavioral)
 	port map(mem_instr_out(7 downto 5),mem_instr_out(1 downto 0),RegDst,RegWrite,MemRead,MemWrite,MemToReg,Branch,InvZero,Halt,
