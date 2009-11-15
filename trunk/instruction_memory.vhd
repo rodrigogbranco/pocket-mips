@@ -1,5 +1,5 @@
---library std;
---use std.textio.all;
+library std;
+use std.textio.all;
 
 
 entity instruction_memory is
@@ -33,48 +33,54 @@ begin
 	end process;
 
 	process(LoadMemory)
-		subtype small is integer range 0 to 255;
-		subtype word is integer;
-		type t_file is file of word;
-		variable i				:	small;
-		variable j				:	natural;
-		--file instructions	:	t_file open read_mode is "source";
-		file instructions : t_file;
-		--variable linha		: line;
-		variable memo		:	word;
-		variable status : file_open_status;
+		--subtype small is integer range 0 to 255;
+		subtype palavra is bit_vector(7 downto 0);
+		--type t_arquivo is file of text;
+		variable i							:	natural;
+		file instrucoes					:	text;
+		variable nome_arquivo	:	string(1 to 6);
+		variable linha					: line;
+		variable valor					:	palavra;
+		variable estado				: file_open_status;
 	begin
 		if(LoadMemory = '1') then
 			--read file
 			i:=0;
-			j:=0;
-			file_open(status,instructions,"source",read_mode);
-		
-			if(status /= open_ok) then
-				report "fudeu";
+			readline(input,linha);
+			read(linha,nome_arquivo);
+			--Abertura do arquivo
+			file_open(estado,instrucoes,nome_arquivo,read_mode);
+			--Excecoes lancadas durante a abertura do arquivo
+			if(estado /= open_ok) then
+				if(estado = name_error) then
+					report "Arquivo não encontrado, verifique se o nome foi digitado corretamente";
+				end if;
+				if(estado = mode_error) then
+					report "Nao foi possivel abrir o arquivo em modo de leitura";
+				end if;
+				if(estado = status_error) then
+					report "O arquivo ja se encontra aberto";
+				end if;
 			end if;
-			
-			while not endfile(instructions) loop
-				--readline(instructions,linha);
-				--read(linha,memo);
-				--mem(i) <= memo;
-				read(instructions,memo);
-				report integer'image(memo);
-				--mem(i) <= memo;
-				--if(memo = '0') then
-					--report "memo = 0";
-				--elsif(memo = '1') then
-					--report "memo = 1";
-				--else
-					--report "memo = null";
-				--end if;
-				--report "j = " & natural'image(j);
-				--report "i = " & natural'image(i);
-				--j:= (j+1) rem 8;
-				--if(j = 0) then
-					--i := i+1;
-				--end if;
-			end loop;
+
+			while not endfile(instrucoes) loop
+				--Leitura da linha do arquivo
+				readline(instrucoes,linha);
+				--Leitura da variavel linha
+				read(linha,valor);
+				mem(i) <= valor;
+				i := i + 1;
+			end loop;if(estado /= open_ok) then
+				if(estado = name_error) then
+					report "Arquivo não encontrado, verifique se o nome foi digitado corretamente";
+				end if;
+				if(estado = mode_error) then
+					report "Nao foi possivel abrir o arquivo em modo de leitura";
+				end if;
+				if(estado = status_error) then
+					report "O arquivo ja se encontra aberto";
+				end if;
+			end if;
 			--mem(0) <= "00111111";
 			--mem(1) <= "00001000";
 			--mem(2) <= "11111111";
