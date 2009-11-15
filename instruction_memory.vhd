@@ -38,7 +38,7 @@ begin
 		--type t_arquivo is file of text;
 		variable i							:	natural;
 		file instrucoes					:	text;
-		variable nome_arquivo	:	string(1 to 6);
+		variable nome_arquivo	:	string(1 to 20);
 		variable linha					: line;
 		variable valor					:	palavra;
 		variable estado				: file_open_status;
@@ -47,7 +47,11 @@ begin
 			--read file
 			i:=0;
 			readline(input,linha);
-			read(linha,nome_arquivo);
+			if(linha'length < nome_arquivo'length) then
+				read(linha,nome_arquivo(1 to linha'length));
+			else
+				readline(input,linha);
+			end if;
 			--Abertura do arquivo
 			file_open(estado,instrucoes,nome_arquivo,read_mode);
 			--Excecoes lancadas durante a abertura do arquivo
