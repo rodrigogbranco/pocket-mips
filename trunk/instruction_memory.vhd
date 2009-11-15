@@ -40,17 +40,18 @@ begin
 		file instrucoes					:	text;
 		variable nome_arquivo	:	string(1 to 20);
 		variable linha					: line;
+		variable linha2				:	line;
 		variable valor					:	palavra;
 		variable estado				: file_open_status;
 	begin
 		if(LoadMemory = '1') then
 			--read file
 			i:=0;
-			readline(input,linha);
-			if(linha'length < nome_arquivo'length) then
-				read(linha,nome_arquivo(1 to linha'length));
+			readline(input,linha2);
+			if(linha2'length < nome_arquivo'length) then
+				read(linha2,nome_arquivo(1 to linha2'length));
 			else
-				readline(input,linha);
+				readline(input,linha2);
 			end if;
 			--Abertura do arquivo
 			file_open(estado,instrucoes,nome_arquivo,read_mode);
@@ -74,17 +75,7 @@ begin
 				read(linha,valor);
 				mem(i) <= valor;
 				i := i + 1;
-			end loop;if(estado /= open_ok) then
-				if(estado = name_error) then
-					report "Arquivo não encontrado, verifique se o nome foi digitado corretamente";
-				end if;
-				if(estado = mode_error) then
-					report "Nao foi possivel abrir o arquivo em modo de leitura";
-				end if;
-				if(estado = status_error) then
-					report "O arquivo ja se encontra aberto";
-				end if;
-			end if;
+			end loop;
 			--mem(0) <= "00111111";
 			--mem(1) <= "00001000";
 			--mem(2) <= "11111111";
