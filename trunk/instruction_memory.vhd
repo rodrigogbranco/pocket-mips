@@ -48,7 +48,6 @@ begin
 			--read file
 			i:=0;
 			while estado /= open_ok loop
-				linha2 := null;
 				report "Insira o nome do arquivo:";
 				readline(input,linha2);
 				if(linha2'length < nome_arquivo'length) then
