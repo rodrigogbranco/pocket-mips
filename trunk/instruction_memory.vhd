@@ -36,38 +36,42 @@ begin
 		--subtype small is integer range 0 to 255;
 		subtype palavra is bit_vector(7 downto 0);
 		--type t_arquivo is file of text;
-		variable i							:	natural;
-		file instrucoes					:	text;
+		variable i						:	natural;
+		variable a						:	natural;
+		file instrucoes				:	text;
 		variable nome_arquivo	:	string(1 to 20);
-		variable linha					: line;
+		variable linha				: line;
 		variable linha2				:	line;
-		variable valor					:	palavra;
+		variable valor				:	palavra;
 		variable estado				: file_open_status := name_error;
 	begin
 		if(LoadMemory = '1') then
 			--read file
-			i:=0;
+			i := 0;
+			a := 1;
 			while estado /= open_ok loop
-				report "Insira o nome do arquivo:";
-				readline(input,linha2);
-				if(linha2'length < nome_arquivo'length) then
-					read(linha2,nome_arquivo(1 to linha2'length));
+				write(linha2,string'("Insira o nome do arquivo:"));
+				writeline(output,linha2);
+				readline(input,linha);
+				if(linha'length < nome_arquivo'length) then
+					read(linha,nome_arquivo(1 to linha'length));
 				else
-					readline(input,linha2);
+					readline(input,linha);
 				end if;
 				--Abertura do arquivo
 				file_open(estado,instrucoes,nome_arquivo,read_mode);
 				--Excecoes lancadas durante a abertura do arquivo
 				if(estado /= open_ok) then
 					if(estado = name_error) then
-						report "Arquivo não encontrado, verifique se o nome foi digitado corretamente";
+						write(linha2,string'("Arquivo "&nome_arquivo&" não encontrado, verifique se o nome foi digitado corretamente"));
 					end if;
 					if(estado = mode_error) then
-						report "Nao foi possivel abrir o arquivo em modo de leitura";
+						write(linha2,string'("Nao foi possivel abrir o arquivo "&nome_arquivo&" em modo de leitura"));
 					end if;
 					if(estado = status_error) then
-						report "O arquivo ja se encontra aberto";
+						write(linha2,string'("O arquivo "&nome_arquivo&" ja se encontra em uso"));
 					end if;
+					writeline(output,linha2);
 				end if;
 			end loop;
 			while not endfile(instrucoes) loop

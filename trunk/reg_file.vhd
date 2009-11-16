@@ -5,14 +5,14 @@ entity reg_file is
 		WriteRegister : in bit_vector(1 downto 0);
 		WriteData     : in bit_vector(7 downto 0);
 		RegWrite      : in bit;
-		Clk	      : in bit;
+		Clk	      		: in bit;
 		ReadData1     : out bit_vector(7 downto 0);
 		ReadData2     : out bit_vector(7 downto 0);
 
-		WriteHidden : in bit;
-		WhichHidden : in bit;
-		ReadHidden : out bit_vector(7 downto 0);
-		Ac_out : out bit_vector(7 downto 0));
+		WriteHidden 	: in bit;
+		WhichHidden 	: in bit;
+		ReadHidden 		: out bit_vector(7 downto 0);
+		Ac_out 				: out bit_vector(7 downto 0));
 end reg_file;
 
 architecture behavioral of reg_file is
