@@ -29,25 +29,33 @@ int main(int argc, char** argv)
 			//cout<<tok;
 			count++;
 			unsigned char instruction;
+			char inst_text[50];
 			if(strncmp(tok,"add",3) == 0)
 			{
-				instruction = 0;
-				tok = strtok(NULL," ,");
-				if(strncmp(tok,"r0",2) == 0);
-					//do nothing
-				else if(strncmp(tok,"r1",2) == 0)
-					instruction = instruction | 8;
-				else if(strncmp(tok,"r2",2) == 0)
-					instruction = instruction | 16;
-				else if(strncmp(tok,"r3",2) == 0)
-					instruction = instruction | 24;
-				else
+				if(strncmp(argv[3],"bin",3) == 0)
 				{
-					cout<<"Erro. Linha "<<count<<": registrador "<<tok<<" não existe\n";
-					return 1;
-				}
+					instruction = 0;
+					tok = strtok(NULL," ,");
+					if(strncmp(tok,"r0",2) == 0);
+						//do nothing
+					else if(strncmp(tok,"r1",2) == 0)
+						instruction = instruction | 8;
+					else if(strncmp(tok,"r2",2) == 0)
+						instruction = instruction | 16;
+					else if(strncmp(tok,"r3",2) == 0)
+						instruction = instruction | 24;
+					else
+					{
+						cout<<"Erro. Linha "<<count<<": registrador "<<tok<<" não existe\n";
+						return 1;
+					}
 
-				fwrite(&instruction,1,1,out);
+					fwrite(&instruction,1,1,out);
+				}
+				else if(strncmp(argv[3],"text",4)
+				{
+					inst_text
+				}
 			}
 			else if(strncmp(tok,"sub",3) == 0)
 			{
