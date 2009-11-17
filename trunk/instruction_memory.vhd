@@ -56,7 +56,7 @@ begin
 				if(linha'length < nome_arquivo'length) then
 					read(linha,nome_arquivo(1 to linha'length));
 				else
-					readline(input,linha);
+					read(linha,nome_arquivo);
 				end if;
 				--Abertura do arquivo
 				file_open(estado,instrucoes,nome_arquivo,read_mode);
@@ -82,9 +82,6 @@ begin
 				mem(i) <= valor;
 				i := i + 1;
 			end loop;
-			--mem(0) <= "00111111";
-			--mem(1) <= "00001000";
-			--mem(2) <= "11111111";
 			--memory is fully loaded
 			MemoryLoaded <= '1';
 		end if;
