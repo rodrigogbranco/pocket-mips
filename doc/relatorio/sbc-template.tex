@@ -133,7 +133,8 @@ Isto pode ser visto na imagem de ondas abaixo.
 
 No primeiro ciclo de clock a memória de instruções é carregada, porem isso foi feito muito rápido de maneira que foi imperceptível, nesse mesmo ciclo o PC é iniciado em 0 e a unidade de controle faz a leitura da primeira instrução, e ajusta os sinais de controle, é possível ver isso através da variável \textit{writehidden}.
 Na borda de subida do segundo ciclo de clock o valor 6 é atribuído ao acumulador AC, o PC é incrementado e dessa maneira a instrução MFA é carregada, note que o sinal \textit{writehidden} volta ao valor 0, isto indica que a instrução recem carregada não escreverá nos acumuladores.
-O processamento continúa de maneira analoga até o fim do programa. A variável \textit{ac\_out} armazena o valor do acumulador AC, dessa maneiro pode-se visualizar a corretude do processador nesse teste.
+O processamento continúa de maneira analoga até o fim do programa. A variável \textit{ac\_out} armazena o valor do acumulador AC, dessa maneira
+ pode-se visualizar a corretude do processador nesse teste.
 
 \section{Conclusões}
 
