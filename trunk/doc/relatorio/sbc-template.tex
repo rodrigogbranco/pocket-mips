@@ -89,13 +89,62 @@ Dessa maneira inserimos dois sinais de controle, para que fosse possível inicia
 
 Um problema que encontramos ao implementar o banco de registradores foi como definir qual registrador acumulador o dados deverá ser escrito ou lido. Para soluciona-lo inserimos dois sinais de controle identificados como \textit{WriteHidden} e \textit{WhichHidden}, onde o primeiro indica se deverá ser feita uma escrita em algum acumulador e o segundo em qual acumulador essa escrita será feita, caso seja 1 o acumulador BC deve ser carregado, caso contrário o AC que deverá receber o valor. Além dessas variáveis de controle inserimos um vetor de bits para retornar qual o valor lido nos acumuladores, a esse vetor demos a identificação de \textit{ReadHidden}.
 
+\subsection{Extensor de sinal}
+
+Esta entidade é bem simples, de forma que foi trivial faze-la. Fizemos com um processo que apenas copia os dados de um vetor de 5 bits para outro de 8 bits, os 5 bits de mais baixa ordem do vetor menor vão para as cinco posições iguais no vetor maior, os bits que sobram são preenchidos com o bit de sinal, ou seja, da posição 5 até à 7 recebe a posição 4 do vetor menor.
+
 \subsection{Unidade de Controle}
 
+Apesar do código extenso dessa entidade, ela não oferece muitas dificuldades. Nela fazemos controle de todo o processador. Antes de qualquer ação uma verificação na condição da memoria de instruções é feita, ou seja, verifica se esta já esta totalmente carregada, e caso afirmativo o processamento da unidade de controle continua e faz uma séride de atribuições aos diversos sinais de controle. Estas atribuições dependem apenas dos sinais de entrada \textit{aluOperation} e \textit{Func}, onde o primeiro é o código da operação que se deve executar e o segundo é usado apenas nas operações MTA, MFA, MTB, MFB.
+
+Fazemos o controle da memória de instruções aqui através de num sinal de inicio de clock, ou seja, enquanto não for recebido o sinal de que a memória de instruções esta carregada a geração de clock não inicia.
+
+\subsection{Caminho de Dados}
+
+Esta entidade é o caminho de dados, nela fazemos a ligação entre todas as outras entidades citadas e ainda entre circuitos primitivo como portas and e multiplexadores. Foi necessário a instanciação de vários sinais para fazer a ligação entre as entidades. Além disso incluímos outro processo que intercepta o sinal retornado pela memória de instruções e retorna na saída padrão a informação das instruções lida em ascii.
+
+\section{Experimentos e Resultados}
+Programa teste:
+\begin{enumerate}
+  \item ADDI 6
+  \item MFA r1
+  \item ADDI 4
+  \item ADD r1
+  \item SUB r1
+  \item HALT
+\end{enumerate}
+Este programa faz o seguinte:
+\begin{enumerate}
+  \item AC = AC + 6
+  \item r1 = AC + 0
+  \item AC = AC + 4
+  \item AC = AC + r1
+  \item AC = AC - r1
+  \item Interrompe o processo
+\end{enumerate}
+No fim o registrador AC deve armazenar o valor 10.
+Isto pode ser visto na imagem de ondas abaixo.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{onda.png}
+\caption{Ondas geradas na execução do programa}
+\label{fig:Arquivo de Ondas}
+\end{figure}
+
+No primeiro ciclo de clock a memória de instruções é carregada, porem isso foi feito muito rápido de maneira que foi imperceptível, nesse mesmo ciclo o PC é iniciado em 0 e a unidade de controle faz a leitura da primeira instrução, e ajusta os sinais de controle, é possível ver isso através da variável \textit{writehidden}.
+Na borda de subida do segundo ciclo de clock o valor 6 é atribuído ao acumulador AC, o PC é incrementado e dessa maneira a instrução MFA é carregada, note que o sinal \textit{writehidden} volta ao valor 0, isto indica que a instrução recem carregada não escreverá nos acumuladores.
+O processamento continúa de maneira analoga até o fim do programa. A variável \textit{ac\_out} armazena o valor do acumulador AC, dessa maneiro pode-se visualizar a corretude do processador nesse teste.
+
+\section{Conclusões}
+
+O trabalho foi desenvolvido no tempo programado, agora a próxima etapa é otimizar o código e deixa-lo mais genérico quanto ao tamanho da memória, usando para isso o comando generic. Além disso falta testa-lo na FPGA, o que acreditamos que vai dar muitos problemas e provocar muitas mudanças no código.
+
+As principais dificuldades encontradas foram questões praticas de simulação. Em alguns momentos perdemos muito tempo para descobrir alguns erros pois estávamos pensando no sistema como qualquer outro programa que estamos acostumado a fazer, principalmente no fato de termos que reatribuir valores a variáveis mesmo quando esses valore não mudam, algo desnecessário na programação comum.
 
 
-\section{References}
+%\section{References}
 
-\bibliographystyle{sbc}
-\bibliography{sbc-template}
+%\bibliographystyle{sbc}
+%\bibliography{sbc-template}
 
 \end{document}
