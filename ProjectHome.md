@@ -1,0 +1,3 @@
+O Processador Pocket-MIPS Monociclo (PMM) é um processador totalmente baseado na máquina MIPS com implementaç˜ao da via de dados monociclo. As instruç˜oes do PMM possuem apenas 1 byte, o ISA é composto por 10 instruções, há quatro registrados de
+propósito geral visíveis aos usuários (0..3)e cada registrador armazena apenas 1 byte. Há outros dois registradores (4..5) que n˜ao s˜ao visíveis aos usuários e também armazenam 1 byte.
+O projeto consiste da implementação desse processador em VHDL.
